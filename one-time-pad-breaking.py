@@ -4,19 +4,18 @@
 # Only use hex and base64 for pretty-printing.
 # OTP: c = m xor k, m = c xor k
 
-def XOR(M, K):
-	m_bin = hex2bin(M)
-	k_bin = hex2bin(K)
-	data_bin = ''.join([ str(int(a,2) ^ int(b,2)) for (a,b) in zip(m_bin, k_bin)])
-	data_hex = bin2hex(data_bin, 4)
-	return data_hex
+def strxor(a, b):     # xor two strings of different lengths
+    if len(a) > len(b):
+       return "".join([chr(ord(x) ^ ord(y)) for (x, y) in zip(a[:len(b)], b)])
+    else:
+       return "".join([chr(ord(x) ^ ord(y)) for (x, y) in zip(a, b[:len(a)])])
+
+def XOR(M, K):	
+	data = "".join([ chr(ord(a) ^ ord(b)) for (a,b) in zip(M, K)])
+	return data
 
 def getkey(M, C):
-	# Convert hex string to binary then XOR to get the key
-	m_bin = hex2bin(M)
-	c_bin = hex2bin(C)
-	key_bin = ''.join([ str(int(a,2) ^ int(b,2)) for (a,b) in zip(m_bin, c_bin)])
-	key = bin2hex(key_bin, 4)
+	key = "".join([ chr(ord(a) ^ ord(b)) for (a,b) in zip(M,C)])	
 	return key
 	
 def bin2hex(bin, pad):
@@ -30,12 +29,12 @@ def hex2bin(hex):
 
 if __name__ == "__main__":
 	m1 = 'attack at dawn'
-	m2 = 'attach at dusk'
+	m2 = 'attack at dusk'
 	c1 = '09e1c5f70a65ac519458e7e53f36'
 	m1_hex = m1.encode().hex()
 	# Get key from message and cipher (M xor C)
-	key = getkey(m1_hex, c1)	
-	print('Key:' ,key)
+	key = getkey(m1_hex, c1)
+	print('Key:' , key.encode().hex())
 	print()
 	# Decrypt message 1 from cipher 
 	data = XOR(c1, key)
