@@ -1,33 +1,20 @@
 #!/usr/local/bin/python
 
 import sys
+import math
 
-# command line argument processing 
-if len(sys.argv) == 2 and sys.argv[1].isdigit():
-        y = int(sys.argv[1])
-        x = y // 2
-        while x > 1: 
-                if y % x == 0: 
-                        print(y, 'has factor ', x)
-                        break
-                x -= 1
-        else:
-                print(y, 'is prime')
-else:
-        print('Invalid arguments')
+def isprime(num):
+	if num == 1 or num%2== 0 and num != 2 : return False
+	#elif num == 2: return True
+	else:
+		for x in range(3, int(math.sqrt(num))):
+			if num%x == 0:
+				return False
+	return True
+	
 
-
-# user define function 
-def isprime(number):
-        x = number // 2
-        y = number
-        while x > 1: 
-                if y % x == 0: 
-                        print(y, 'has factor ', x)
-                        break
-                x -= 1
-        else:
-                print(y, 'is prime')
-
-        
-
+if __name__ == '__main__':
+	#print(sys.argv)
+	nums = sys.argv[1:]
+	ret = list(map(isprime, map(int, nums)))
+	print(ret)
